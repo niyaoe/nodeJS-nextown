@@ -1,0 +1,108 @@
+const userModel = require("../Models/user");
+const bcrypt = require("bcrypt")
+
+const userCreate = async (req, res) => {
+  const { Name, Age, Email, Password } = req.body;
+  console.log("after DS :", req.body);
+
+  const hashedPassword = await bcrypt.hash(Password, 10)
+
+  const existingUser = await userModel.findOne({ Email })
+
+  if (existingUser) {
+    return res.status(409).json("already Exist")
+
+  } else {
+    try {
+      const userDetails = await userModel.create({
+        Name,
+        Age,
+        Email,
+        Password: hashedPassword,
+      });
+      res.json({ status: true, data: userDetails });
+    } catch (error) {
+      res.json({ status: false, error: {} });
+      return res.status(500).json("issue warranted");
+    }
+  }
+};
+
+const getUser = async (req, res) => {
+  try {
+    const userDetails = await userModel.find();
+    res.json(userDetails);
+  } catch (error) {
+    console.log("fetch error :", error);
+    return res.status(500).json("internal server issue");
+  }
+};
+
+const deleteUser = async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const deleteUser = await userModel.findByIdAndDelete(userId);
+    res.json("Deleted successfully");
+  } catch (error) {
+    console.log("cant delete :", error);
+  }
+};
+
+const getUserById = async (req, res) => {
+  const getId = req.params.id
+  try {
+    const singleUser = await userModel.findById(getId)
+    res.json(singleUser)
+  } catch (error) {
+    return res.status(500).json("get issue")
+    console.log("issue warranted");
+
+  }
+}
+
+const userUpdate = async (req, res) => {
+  const getId = req.params.id;
+  const { Name, Age, Email, Password } = req.body;
+
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(getId, { Name, Age, Email, Password }, { new: true })
+    res.json(updatedUser)
+  } catch (error) {
+    return res.status(500).json("issue warranted")
+
+  }
+}
+
+const Login = async (req, res) => {
+
+  const { Email, Password } = req.body
+
+  const userDetails = await userModel.findOne({ Email })
+
+  if (!userDetails) {
+    return res.status(409).json("invalid username")
+  }
+
+  const isPasswordValid = await bcrypt.compare(Password, userDetails.Password)
+
+  if (!isPasswordValid) {
+    return res.status(401).send("incorrect Password")
+  }
+
+  // res.json({
+    // _Id: userDetails._id,
+    // Email: userDetails.Email,
+    // Password: userDetails.Password
+  // })
+
+  res.json({user:{
+    _Id: userDetails._id,
+    Email: userDetails.Email,
+    Password: userDetails.Password,
+    Name: userDetails.Name
+  }})
+
+}
+
+module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login };
