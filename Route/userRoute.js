@@ -8,6 +8,8 @@ const {
   Login,
   
 } = require("../Controller/userControl");
+const { verifyToken } = require("../middleWares/authMiddleware");
+const { testAPI } = require("../Controller/testAPI");
 
 const router = express.Router();
 
@@ -18,5 +20,6 @@ router.route("/users/:id").get(getUserById);
 router.route("/edit/:id").put(userUpdate);
 router.route("/login").post(Login);
 
+router.get("/tokenTest",verifyToken, testAPI)
 
 module.exports = router;
