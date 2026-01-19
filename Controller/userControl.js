@@ -1,5 +1,9 @@
 const userModel = require("../Models/user");
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+
+ 
+
 
 const userCreate = async (req, res) => {
   const { Name, Age, Email, Password } = req.body;
@@ -77,26 +81,24 @@ const userUpdate = async (req, res) => {
 const Login = async (req, res) => {
 
   const { Email, Password } = req.body
-
   const userDetails = await userModel.findOne({ Email })
 
   if (!userDetails) {
     return res.status(409).json("invalid username")
   }
-
   const isPasswordValid = await bcrypt.compare(Password, userDetails.Password)
-
   if (!isPasswordValid) {
     return res.status(401).send("incorrect Password")
   }
 
-  // res.json({
-    // _Id: userDetails._id,
-    // Email: userDetails.Email,
-    // Password: userDetails.Password
-  // })
+  const token = jwt.sign(
+    {userId : userDetails._id},
+    process.env.JWT_SECRET,
+    {expiresIn: "1h"}
+  )
 
   res.json({user:{
+    _token: token,
     _Id: userDetails._id,
     Email: userDetails.Email,
     Password: userDetails.Password,

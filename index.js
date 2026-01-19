@@ -3,8 +3,9 @@ const connection = require("./MDB/config");
 const authRouter = require("./Route/userRoute");
 const smartphoneRouter = require("./Route/smartphoneRoute")
 const cors = require("cors")
+const dotenv = require("dotenv")
 
-
+dotenv.config();
 
 const app = express()
 connection();
@@ -18,5 +19,5 @@ app.use('/smartphones',smartphoneRouter)
 
 
 
-const PORT = 5005
+const PORT = process.env.PORT || 5005;
 app.listen(PORT,console.log(`server is ok ${PORT}`));
