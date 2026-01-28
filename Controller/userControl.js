@@ -111,4 +111,8 @@ const Login = async (req, res) => {
 
 }
 
+const uploadProfilePhoto = async (req,res) => {
+
+}
+
 module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login };

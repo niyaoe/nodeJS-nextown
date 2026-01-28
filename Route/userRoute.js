@@ -10,6 +10,7 @@ const {
 } = require("../Controller/userControl");
 const { verifyToken } = require("../middleWares/authMiddleware");
 const { testAPI } = require("../Controller/testAPI");
+const upload = require("../Utils/multer")
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.route("/edit/:id").put(userUpdate);
 router.route("/login").post(Login);
 
 router.get("/tokenTest",verifyToken, testAPI)
+router.post("/uploadprofilephoto",verifyToken,upload.single("photo"),)
 
 module.exports = router;
