@@ -79,6 +79,7 @@ const userUpdate = async (req, res) => {
 const Login = async (req, res) => {
 
   const { Email, Password } = req.body
+  
   const userDetails = await userModel.findOne({ Email })
 
   if (!userDetails) {
