@@ -1,34 +1,36 @@
-const multer = require("multer")
-const path = require("path")
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
-    destination: function (req,file,cb){
-        cb(null,"uploads/profiles")
-    },
-    filename: function (req,file,cb){
-        const uniqueName = `${req.user.userId}-${Date.now()}${path.extname(file.orginalname)}`
-        cb(null, uniqueName)
-    }
+  destination: function (req, file, cb) {
+    cb(null, "uploads/profiles");
+  },
+  filename: function (req, file, cb) {
+    const uniqueName = `${req.user.userId}-${Date.now()}-${path.extname(file.originalname)}`;
+    cb(null, uniqueName);
+  },
 });
 
-const fileFilter = (req,file,cb)=>{
-    const allowedTypes = /jpeg|jpg|png|gif/;
-    const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase())
-    const mimetype = allowedTypes.test(file.mimetype);
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif/;
+  const extname = allowedTypes.test(
+    path.extname(file.originalname).toLowerCase(),
+  );
+  const mimetype = allowedTypes.test(file.mimetype);
 
-    if(extname && mimetype){
-        cb(null,true)
-    }else{
-        cb(new Error("Only image files are allowed!"),false)
-    }
-}
+  if (extname && mimetype) {
+    cb(null, true);
+  } else {
+    cb(new Error("Only image files are allowed!"), false);
+  }
+};
 
 const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 5 * 1024 * 1024
-    },
-    fileFilter: fileFilter
+  storage: storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+  fileFilter: fileFilter,
 });
 
 module.exports = upload;

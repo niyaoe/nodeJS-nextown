@@ -12,7 +12,7 @@ exports.verifyToken = (req,res,next) =>{
         const decoded = jwt.verify(token,process.env.JWT_SECRET)
         req.user = decoded
         next()
-        console.log(req.user);
+        console.log("req.user.userId",req.user.userId);
         
     } catch (error) {
         res.status(401).json({message : "Invalid Token"})

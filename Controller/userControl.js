@@ -82,7 +82,7 @@ const Login = async (req, res) => {
   
   const userDetails = await userModel.findOne({ Email })
 
-  if (!userDetails) {
+  if (!userDetails) {condition
     return res.status(409).json("invalid username")
   }
   const isPasswordValid = await bcrypt.compare(Password, userDetails.Password)
@@ -90,7 +90,7 @@ const Login = async (req, res) => {
     return res.status(401).send("incorrect Password")
   }
 
-  const token = jwt.sign(    //{ header , {payload} , secretKey, {expDate} }
+  const token = jwt.sign(         //( {payload} , secretKey, {expDate} )
     {
       userId : userDetails._id,
       Email: userDetails.Email,
@@ -112,7 +112,31 @@ const Login = async (req, res) => {
 }
 
 const uploadProfilePhoto = async (req,res) => {
+  try {
+
+    if (!req.file) {
+      return res.status(400).json({message : "No file uploaded"})
+    }
+    const user = await userModel.findByIdAndUpdate(
+      req.user.userId,
+      { profilePhoto: `/uploads/profiles/${req.file.filename}`},
+      { new: true }
+    ).select("-password")
+
+    res.json({
+      messsage: "Profile Photo uploaded successFully",
+      user
+    })
+
+
+  } catch (error) {
+    console.error("upload error",error)
+    res.status(500).json({message:"failed to upload profile photo"})
+
+    
+  }
+
 
 }
 
-module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login };
+module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login ,uploadProfilePhoto};
