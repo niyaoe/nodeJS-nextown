@@ -125,7 +125,9 @@ const uploadProfilePhoto = async (req,res) => {
 
     res.json({
       messsage: "Profile Photo uploaded successFully",
-      user
+      user,
+      
+      
     })
 
 
