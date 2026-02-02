@@ -121,21 +121,18 @@ const uploadProfilePhoto = async (req,res) => {
       req.user.userId,
       { profilePhoto: `/uploads/profiles/${req.file.filename}`},
       { new: true }
-    ).select("-password")
+    ).select("-Password")
 
     res.json({
       messsage: "Profile Photo uploaded successFully",
-      user,
-      
-      
+      user
+           
     })
-
 
   } catch (error) {
     console.error("upload error",error)
     res.status(500).json({message:"failed to upload profile photo"})
 
-    
   }
 
 
