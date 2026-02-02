@@ -106,7 +106,8 @@ const Login = async (req, res) => {
     _Id: userDetails._id,
     Email: userDetails.Email,
     Password: userDetails.Password,
-    Name: userDetails.Name
+    Name: userDetails.Name,
+    // profilePhoto
   }})
 
 }
