@@ -107,7 +107,7 @@ const Login = async (req, res) => {
     Email: userDetails.Email,
     Password: userDetails.Password,
     Name: userDetails.Name,
-    // profilePhoto
+    
   }})
 
 }
@@ -139,4 +139,13 @@ const uploadProfilePhoto = async (req,res) => {
 
 }
 
-module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login ,uploadProfilePhoto};
+const profile = async (req, res) => {
+  const user = await userModel.findById(req.user.userId).select("-password");
+
+  res.json({
+    message: "Profile data",
+    user
+  });
+};
+
+module.exports = { userCreate, getUser, deleteUser, getUserById, userUpdate, Login ,uploadProfilePhoto ,profile};

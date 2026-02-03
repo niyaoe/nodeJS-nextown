@@ -15,7 +15,7 @@ exports.verifyToken = (req,res,next) =>{
         console.log("req.user.userId",req.user.userId);
         
     } catch (error) {
-        res.status(401).json({message : "Invalid Token"})
+        res.status(407).json({message : "Invalid Token"})
     }
 
 }

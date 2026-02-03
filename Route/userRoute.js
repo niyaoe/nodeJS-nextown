@@ -7,6 +7,7 @@ const {
   userUpdate,
   Login,
   uploadProfilePhoto,
+  profile,
   
 } = require("../Controller/userControl");
 const { verifyToken } = require("../middleWares/authMiddleware");
@@ -24,5 +25,7 @@ router.route("/login").post(Login);
 
 router.get("/tokenTest",verifyToken, testAPI)
 router.post("/uploadprofilephoto",verifyToken,upload.single("profilePhoto"),uploadProfilePhoto)
+router.get("/profile",verifyToken, profile)
+
 
 module.exports = router;
