@@ -140,7 +140,7 @@ const uploadProfilePhoto = async (req,res) => {
 }
 
 const profile = async (req, res) => {
-  const user = await userModel.findById(req.user.userId).select("-password");
+  const user = await userModel.findById(req.user.userId).select("-Password");
 
   res.json({
     message: "Profile data",
