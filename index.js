@@ -9,6 +9,7 @@ dotenv.config();
 
 const app = express()
 connection();
+
 app.use(cors({
     origin:"http://localhost:5173"
 }))
